@@ -31,17 +31,14 @@ if (form) {
         try {
             const response = await fetch(new URL('http://localhost:8081/login'), {
                 method: 'POST',
-                // mode: 'no-cors',
+                credentials: 'include',
                 body: data,
             });
 
             if (response.ok) {
                 form.reset();
-                console.log(await response.json())
                 window.location.href = '/';
             } else {
-                // const error = await response.json();
-                // throw new Error(error.message || 'Error al enviar el formulario');
                 throw new Error('Error al enviar el formulario');
             }
         } catch {

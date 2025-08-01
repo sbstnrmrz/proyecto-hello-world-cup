@@ -17,7 +17,7 @@ func enableCORS(w *http.ResponseWriter) {
 	// Puedes usar '*' para permitir cualquier origen (útil para desarrollo, pero no recomendado en producción sin precauciones)
 	(*w).Header().Set("Access-Control-Allow-Origin", "http://localhost:4321") // ¡Cambia esto por el origen de tu frontend!
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, Set-Cookie")
 	(*w).Header().Set("Access-Control-Allow-Credentials", "true") // Si necesitas manejar cookies o credenciales
 }
 
@@ -100,17 +100,15 @@ func main()  {
 		log.Println(sessionToken)
 
 		http.SetCookie(w, &http.Cookie{
-			Name:     "session_token",
+			Name:     "session-token",
 			Value:    sessionToken,
-			MaxAge:   5600,
-			HttpOnly: true,
+			MaxAge:   3600,
 			Secure: true,
-			Path: "/",
-			SameSite: http.SameSiteLaxMode,
+			SameSite: http.SameSiteNoneMode,
+			HttpOnly: true,
 		})
 
 		http.Error(w, fmt.Sprintf("Login successfull"), http.StatusOK)
-  		json.NewEncoder(w).Encode(sessionToken)
 	}).Methods("POST")
 
 	router.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
