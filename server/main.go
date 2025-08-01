@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
@@ -103,8 +102,11 @@ func main()  {
 		http.SetCookie(w, &http.Cookie{
 			Name:     "session_token",
 			Value:    sessionToken,
-			Expires:  time.Now().Add(24 * time.Hour),
+			MaxAge:   5600,
 			HttpOnly: true,
+			Secure: true,
+			Path: "/",
+			SameSite: http.SameSiteLaxMode,
 		})
 
 		http.Error(w, fmt.Sprintf("Login successfull"), http.StatusOK)
