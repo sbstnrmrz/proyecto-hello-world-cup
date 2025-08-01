@@ -119,6 +119,17 @@ func main()  {
   		json.NewEncoder(w).Encode(GetUsers(db))
 	}).Methods("GET")
 
+	router.HandleFunc("/get-user", func(w http.ResponseWriter, r *http.Request) {
+		enableCORS(&w)
+  		w.Header().Set("Content-Type", "application/json")
+		session, err := r.Cookie("session-token")
+		if (err != nil) {
+			log.Printf("ohh no dio error")
+		}
+
+		json.NewEncoder(w).Encode(GetUser(db, sessions[session.Value]))
+	}).Methods("GET")
+
 	CreateUsersTable(db)
 	CreateUser(db, User{Name: "skibidi", Password: "asd123"})
 	users := GetUsers(db)
