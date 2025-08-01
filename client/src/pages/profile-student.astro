@@ -32,18 +32,19 @@ const user = await response.json();
 
             <div class="flex flex-row ml-6 mt-6">
 
-                <div class="ml-16 w-[80px] h-[80px] bg-green-600 rounded-full">
-                    <br>
+                <div class="ml-12 w-[80px] h-[80px] bg-green-600 rounded-full">
+                    <input class="w-[80px] h-[80px] opacity-0 bg-amber-600"  placeholder="" type="file" title=""></input>
                 </div>
 
-                <div class="flex flex-col ml-25">
+                <div class="flex flex-col ml-15">
                     <h1 id="placeholder_nick">{user.Nick}</h1>
                     <h1 id="placeholder_correo">{user.Email}</h1>
+                    <input class="student_commentary" type="text" placeholder="Comentario"></input>
                 </div>
 
             </div>
 
-            <div class="flex flex-row m-4 bg-pink-700 justify-evenly">
+            <div class="flex flex-row m-4 justify-evenly">
 
                 <input class="student_inputs"  type="text"></input>
                 <input class="student_inputs" type="text"></input>
@@ -51,7 +52,7 @@ const user = await response.json();
 
             </div>
 
-            <div class="text-center bg-amber-400 m-4">
+            <div class="text-center m-4">
                 <h1 class="">Areas de estudio</h1>
                 <!--AQUI VA EL FOR QUE RETORNA UN DIV POR CADA AREA DE ESTUDIO QUE NECESITA -->
                 <div>ss</div>
