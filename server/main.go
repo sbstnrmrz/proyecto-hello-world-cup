@@ -1,11 +1,14 @@
 package main
 
 import (
+	"crypto/rand"
 	"database/sql"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
@@ -19,12 +22,22 @@ func enableCORS(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Credentials", "true") // Si necesitas manejar cookies o credenciales
 }
 
+func GenerateSessionToken() string {
+    b := make([]byte, 32)
+    rand.Read(b)
+    return base64.URLEncoding.EncodeToString(b)
+}
+
+
+
 func main()  {
 	db, err := sql.Open("sqlite3", "database.db");
 	if err != nil {
 		log.Fatalln("error opening db:", err);
 	}
 	defer db.Close()
+
+	var sessions = make(map[string]string)
 
 	router := mux.NewRouter()
 
@@ -82,6 +95,16 @@ func main()  {
 			http.Error(w, fmt.Sprintf("Username or password incorrect"), http.StatusBadRequest)
 			return
 		}
+
+		sessionToken := GenerateSessionToken()
+		sessions[sessionToken] = username
+
+		http.SetCookie(w, &http.Cookie{
+			Name:     "session_token",
+			Value:    sessionToken,
+			Expires:  time.Now().Add(24 * time.Hour),
+			HttpOnly: true,
+		})
 
 		http.Error(w, fmt.Sprintf("Login successfull"), http.StatusOK)
 	}).Methods("POST")
