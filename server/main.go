@@ -58,6 +58,7 @@ func main()  {
 	}).Methods("POST")
 
 	router.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+		enableCORS(&w)
 		err := r.ParseForm()
 		if err != nil {
 			log.Println("error parsing form:",err);
