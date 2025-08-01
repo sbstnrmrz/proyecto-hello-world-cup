@@ -4,6 +4,8 @@ const UNPROTECTED_ROUTES = [
     /\/login($|\/.*)/,
     /\/create-account($|\/.*)/,
     /\/home($|\/.*)/,
+    /\/profile-student($|\/.*)/,
+    /\/profile-teacher($|\/.*)/,
     /\/signup($|\/.*)/,
     /\/test($|\/.*)/,
     /\/500($|\/.*)/,
