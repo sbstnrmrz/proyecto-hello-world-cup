@@ -7,6 +7,12 @@ import (
     "golang.org/x/crypto/bcrypt"
 )
 
+type User struct {
+	Name string
+	Password string
+}
+
+
 func CreateUsersTable(db *sql.DB) {
 	const sentence = `CREATE TABLE IF NOT EXISTS users (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,6 +47,16 @@ func CreateUser(db *sql.DB, user User) {
 	log.Printf("user: '%s' created\n", user.Name)
 }
 
-func GetUser(db *sql.DB) {
+func GetUser(db *sql.DB, name string) User {
+	const query = `SELECT name, password FROM user WHERE name = ? LIMIT 1`
 
+	result, err := db.Exec(query, name)
+
+	if err != nil {
+		log.Printf("error getting user '%s': %v\n", name, err)
+		return User{};
+	}
+
+	log.Printf("user: '%s' selected\n", name)
+	return 
 }
