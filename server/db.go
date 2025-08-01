@@ -41,6 +41,41 @@ func CreateUser(db *sql.DB, user User) {
 	log.Printf("user: '%s' created\n", user.Name)
 }
 
-func GetUser(db *sql.DB) {
+// maybe return a User pointer
+func GetUser(db *sql.DB, username string) User {
+	user := User{}
+	const sentence = `SELECT name, password FROM users WHERE name = ?`
+	row := db.QueryRow(sentence, username)
+	err := row.Scan(&user.Name, &user.Password)
+	if err != nil {
+		log.Printf("cannot found user '%s': %v\n", username, err)
+	}
 
+	return user 
+}
+
+func GetUsers(db *sql.DB) []User {
+	users := []User{}
+	const sentence = `SELECT name, password FROM users`
+
+	rows, err := db.Query(sentence)
+	if err != nil {
+		log.Println("error querying users:", err)
+		return users
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		user := User{}
+
+		err := rows.Scan(&user.Name, &user.Password)
+		if err != nil {
+			log.Println("error getting row:", err)	
+			return users
+		}
+
+		users = append(users, user)
+	}
+
+	return users
 }
