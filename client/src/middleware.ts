@@ -2,6 +2,7 @@ import { defineMiddleware } from "astro:middleware";
 
 const UNPROTECTED_ROUTES = [
     /\/login($|\/.*)/,
+    /\/create-account($|\/.*)/,
     /\/signup($|\/.*)/,
     /\/test($|\/.*)/,
     /\/500($|\/.*)/,
@@ -20,7 +21,7 @@ export const onRequest = defineMiddleware((context, next) => {
     const sessionToken = context.cookies.get('session_token')?.value;
     if (!sessionToken) {
         context.request.headers.set('x-redirect-to', context.url.pathname);
-        return context.redirect(context.url.origin +  '/test');
+        return context.redirect(context.url.origin +  '/login');
     }
 
     return next();
