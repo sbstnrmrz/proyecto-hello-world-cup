@@ -11,11 +11,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type User struct {
-	Name string
-	Password string
-}
-
 func main()  {
 	db, err := sql.Open("sqlite3", "database.db");
 	if err != nil {

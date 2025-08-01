@@ -7,6 +7,12 @@ import (
     "golang.org/x/crypto/bcrypt"
 )
 
+type User struct {
+	Name string
+	Password string
+}
+
+
 func CreateUsersTable(db *sql.DB) {
 	const sentence = `CREATE TABLE IF NOT EXISTS users (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
