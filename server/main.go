@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"regexp"
+	"strings"
 
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
@@ -19,8 +21,6 @@ func GenerateSessionToken() string {
     rand.Read(b)
     return base64.URLEncoding.EncodeToString(b)
 }
-
-
 
 func main()  {
 	db, err := sql.Open("sqlite3", "database.db");
@@ -41,14 +41,16 @@ func main()  {
 			return
 		}
 
-		username := r.FormValue("username")
+		email := r.FormValue("email")
 		password := r.FormValue("password")
 
-		var name string
-        err = db.QueryRow("SELECT name FROM users WHERE name = ?", username).Scan(&name)
+		regexp.Compile("[a-zA-Z1-9.]+@unet.edu.ve$")
+
+		var savedEmail string
+        err = db.QueryRow("SELECT email FROM users WHERE email = ?", email).Scan(&savedEmail)
 		if err == nil {
-            log.Println("username:",username,"already exists!")
-			http.Error(w, fmt.Sprintf("Username: %s already exists", username), http.StatusBadRequest)
+			log.Println("account with email:",email,"already exists!")
+			http.Error(w, fmt.Sprintf("account with email: %s", email), http.StatusBadRequest)
 			return
         } else if err != sql.ErrNoRows {
 			http.Error(w, "Database error", http.StatusBadRequest)
@@ -56,9 +58,17 @@ func main()  {
             return
         }
 
-		user := User{Name: username, Password: password}
+		nickFromEmail := strings.Split(email, "@")[0]
+		log.Printf("nick for %s: %s\n", email, nickFromEmail)
+
+		user := User{
+			Nick: nickFromEmail,
+			Email: email,
+			Password: password,
+			TipoUsuario: 1,
+		}
 		CreateUser(db, user)
-		http.Error(w, fmt.Sprintf("User: %s created successfully", username), http.StatusOK)
+		http.Error(w, fmt.Sprintf("User for email: %s created successfully", email), http.StatusOK)
 	}).Methods("POST")
 
 	router.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
@@ -68,26 +78,26 @@ func main()  {
 			return
 		}
 
-		username := r.FormValue("username")
+		email := r.FormValue("email")
 		password := r.FormValue("password")
 
 		var hashedPassword string
-        err = db.QueryRow("SELECT password FROM users WHERE name = ?", username).Scan(&hashedPassword)
+        err = db.QueryRow("SELECT password FROM users WHERE email = ?", email).Scan(&hashedPassword)
 		if err != nil {
-			log.Printf("username: %s not found\n", username)
-			http.Error(w, fmt.Sprintf("Username or password incorrect"), http.StatusBadRequest)
+			log.Printf("account with email: %s not found\n", email)
+			http.Error(w, fmt.Sprintf("account with email: %s doesnt exists", email), http.StatusBadRequest)
 			return
         } 
 
 		passwordMatch := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 		if passwordMatch != nil {
 			log.Println("password doesnt match:", err)
-			http.Error(w, fmt.Sprintf("Username or password incorrect"), http.StatusBadRequest)
+			http.Error(w, fmt.Sprintf("email or password incorrect"), http.StatusBadRequest)
 			return
 		}
 
 		sessionToken := GenerateSessionToken()
-		sessions[sessionToken] = username
+		sessions[sessionToken] = email 
 
 		http.SetCookie(w, &http.Cookie{
 			Name:     "session_token",
@@ -110,12 +120,12 @@ func main()  {
   		json.NewEncoder(w).Encode(GetUsers(db))
 	}).Methods("GET")
 
+	DropUsersTable(db)
 	CreateUsersTable(db)
-	CreateUser(db, User{Name: "skibidi", Password: "asd123"})
-	users := GetUsers(db)
-	fmt.Println(users)
 
 	const port = "8081"
 	fmt.Printf("server listening in localhost:%s\n",port)
 	http.ListenAndServe("localhost:" + port, router)
+	user := GetUser(db, "pedro.sanchez")
+	fmt.Println(user)
 }
