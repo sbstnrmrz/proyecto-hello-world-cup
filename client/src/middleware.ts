@@ -3,6 +3,7 @@ import { defineMiddleware } from "astro:middleware";
 const UNPROTECTED_ROUTES = [
     /\/login($|\/.*)/,
     /\/create-account($|\/.*)/,
+    /\/home($|\/.*)/,
     /\/signup($|\/.*)/,
     /\/test($|\/.*)/,
     /\/500($|\/.*)/,
