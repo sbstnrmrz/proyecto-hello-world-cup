@@ -29,8 +29,6 @@ func main()  {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/create-user", func(w http.ResponseWriter, r *http.Request) {
-//		w.Header().Set("Content-Type", "application/json")
-//		json.NewEncoder(w).Encode()
 		enableCORS(&w)
 		err := r.ParseForm()
 		if err != nil {
@@ -60,8 +58,6 @@ func main()  {
 	}).Methods("POST")
 
 	router.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-//		w.Header().Set("Content-Type", "application/json")
-//		json.NewEncoder(w).Encode()
 		err := r.ParseForm()
 		if err != nil {
 			log.Println("error parsing form:",err);
@@ -73,7 +69,7 @@ func main()  {
 
 		var hashedPassword string
         err = db.QueryRow("SELECT password FROM users WHERE name = ?", username).Scan(&hashedPassword)
-		if err == nil {
+		if err != nil {
 			log.Printf("username: %s not found\n", username)
 			http.Error(w, fmt.Sprintf("Username or password incorrect"), http.StatusBadRequest)
 			return
@@ -88,6 +84,9 @@ func main()  {
 
 		http.Error(w, fmt.Sprintf("Login successfull"), http.StatusOK)
 	}).Methods("POST")
+
+	router.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
+	})
 
 	router.HandleFunc("/get-users", func(w http.ResponseWriter, r *http.Request) {
   		w.Header().Set("Content-Type", "application/json")
