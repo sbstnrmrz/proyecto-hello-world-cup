@@ -162,7 +162,7 @@
 
    @apply bg-gradient-to-tl from-[#4f6fc3] to-[#d3dbff];
    @apply w-[33%];
-   @apply h-[43%];
+   @apply h-[50%];
    @apply border;
    @apply rounded-3xl;
 
@@ -202,6 +202,22 @@
    @apply rounded-lg;
    @apply text-center;
    @apply w-[30%];
+   @apply transition-all;
+   @apply duration-500;
+   @apply selection:bg-gray-400;
+
+}
+
+.student_commentary {
+
+   @apply bg-amber-50;
+   @apply border-2 ;
+   @apply rounded-lg;
+   @apply text-center;
+   @apply text-[12px];
+   @apply text-wrap;
+   @apply w-60;
+   @apply h-[50%];
    @apply transition-all;
    @apply duration-500;
    @apply selection:bg-gray-400;
