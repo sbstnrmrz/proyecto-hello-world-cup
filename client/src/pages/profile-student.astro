@@ -37,7 +37,7 @@ const user = await response.json();
                 </div>
 
                 <div class="flex flex-col ml-15">
-                    <h1 id="placeholder_nick">{user.Nick}</h1>
+                    <h1 id="placeholder_nick">{"@" + user.Nick}</h1>
                     <h1 id="placeholder_correo">{user.Email}</h1>
                     <input class="student_commentary" type="text" placeholder="Comentario"></input>
                 </div>
