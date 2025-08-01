@@ -8,16 +8,23 @@ import (
 )
 
 type User struct {
-	Name string
+	Nick string
+	Email string
 	Password string
+	TipoUsuario int 
+	DateCreated string
+	LastSession string
 }
-
 
 func CreateUsersTable(db *sql.DB) {
 	const sentence = `CREATE TABLE IF NOT EXISTS users (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		name TEXT NOT NULL UNIQUE,
-		password TEXT NOT NULL
+		nick TEXT NOT NULL UNIQUE,
+		email TEXT NOT NULL UNIQUE,
+		password TEXT NOT NULL,
+		tipo_usuario INTEGER NOT NULL,
+		date_created TEXT DEFAULT CURRENT_TIMESTAMP,
+		last_session TEXT DEFAULT CURRENT_TIMESTAMP 
 	);`
 
 	_, err := db.Exec(sentence)
@@ -30,7 +37,7 @@ func CreateUsersTable(db *sql.DB) {
 }
 
 func CreateUser(db *sql.DB, user User) {
-	const sentence = `INSERT INTO users (name, password) VALUES (?, ?)`
+	const sentence = `INSERT INTO users (nick, email, password, tipo_usuario) VALUES (?, ?, ?, ?)`
 
     hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -38,23 +45,23 @@ func CreateUser(db *sql.DB, user User) {
 		return
 	}
 
-	_, err = db.Exec(sentence, user.Name, hashedPassword)
+	_, err = db.Exec(sentence, user.Nick, user.Email, hashedPassword, user.TipoUsuario)
 	if err != nil {
 		log.Printf("error creating user '%s': %v\n", user, err)
 		return
 	}
 
-	log.Printf("user: '%s' created\n", user.Name)
+	log.Printf("user with email: '%s' created\n", user.Email)
 }
 
 // maybe return a User pointer
-func GetUser(db *sql.DB, username string) User {
+func GetUser(db *sql.DB, email string) User {
 	user := User{}
-	const sentence = `SELECT name, password FROM users WHERE name = ?`
-	row := db.QueryRow(sentence, username)
-	err := row.Scan(&user.Name, &user.Password)
+	const sentence = `SELECT nick, email, tipo_usuario, date_created, last_session FROM users WHERE email = ?`
+	row := db.QueryRow(sentence, email)
+	err := row.Scan(&user.Nick, &user.Email, &user.DateCreated, &user.LastSession)
 	if err != nil {
-		log.Printf("cannot found user '%s': %v\n", username, err)
+		log.Printf("cannot found user '%s': %v\n", email, err)
 	}
 
 	return user 
@@ -62,7 +69,7 @@ func GetUser(db *sql.DB, username string) User {
 
 func GetUsers(db *sql.DB) []User {
 	users := []User{}
-	const sentence = `SELECT name, password FROM users`
+	const sentence = `SELECT nick, email, date_created, last_session FROM users`
 
 	rows, err := db.Query(sentence)
 	if err != nil {
@@ -74,7 +81,7 @@ func GetUsers(db *sql.DB) []User {
 	for rows.Next() {
 		user := User{}
 
-		err := rows.Scan(&user.Name, &user.Password)
+		err := rows.Scan(&user.Nick, &user.Email, &user.DateCreated, &user.LastSession)
 		if err != nil {
 			log.Println("error getting row:", err)	
 			return users
@@ -84,4 +91,15 @@ func GetUsers(db *sql.DB) []User {
 	}
 
 	return users
+}
+
+func DropUsersTable(db *sql.DB) {
+	const sentence = `DROP TABLE IF EXISTS users;`
+	_, err := db.Exec(sentence)
+	if err != nil {
+		log.Println("error dropping users table:", err)
+		return
+	}
+
+	log.Println("users table dropped")
 }
