@@ -33,7 +33,8 @@ const user = await response.json();
             <div class="flex flex-row ml-6 mt-6">
 
                 <div class="ml-12 w-[80px] h-[80px] bg-green-600 rounded-full">
-                    <input class="w-[80px] h-[80px] opacity-0 bg-amber-600"  placeholder="" type="file" title=""></input>
+          <input id='pfp-input' class="w-[80px] h-[80px] opacity-0 bg-amber-600"  placeholder="" type="file" title="">
+        </input>
                 </div>
 
                 <div class="flex flex-col ml-15">
@@ -61,10 +62,4 @@ const user = await response.json();
         <br>
         <button class="profile_changes" type="submit">Guardar Cambios</button>
     </div>
-
-
-
-
-
-
 </Layout>
