@@ -1,12 +1,14 @@
 package main
 
 import (
-	"log"
 	"database/sql"
-    _ "github.com/mattn/go-sqlite3"
-
+	"encoding/json"
+	"fmt"
+	"log"
 	"net/http"
+
 	"github.com/gorilla/mux"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main()  {
@@ -18,21 +20,38 @@ func main()  {
 
 	router := mux.NewRouter()
 
-	router.HandleFunc("/user/{}",
-		func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "application/json")
+	router.HandleFunc("/create-user", func(w http.ResponseWriter, r *http.Request) {
+//		w.Header().Set("Content-Type", "application/json")
+//		json.NewEncoder(w).Encode()
+		err := r.ParseForm()
+		if err != nil {
+			log.Println("error creating user:",err);
+			return
+		}
 
-			out, err :=  c.GetDepartamentos(dbpool)
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "Query failed: %v\n", err)
-				return
-			}
+		username := r.FormValue("username")
+		password := r.FormValue("password")
 
-			fmt.Println(r.URL)
-			json.NewEncoder(w).Encode(out)
-		}).Methods("GET")
+        err = db.QueryRow("SELECT username FROM users WHERE username = ?", username).Scan()
+		if err == nil {
+            log.Println("Username:",username,"already exists!")
+			return
+        } else if err != sql.ErrNoRows {
+			fmt.Println("db error:", err)
+            return
+        }
+
+		user := User{Name: username, Password: password}
+		CreateUser(db, user)
+	}).Methods("GET")
+
+	router.HandleFunc("/get-users", func(w http.ResponseWriter, r *http.Request) {
+  		w.Header().Set("Content-Type", "application/json")
+  		json.NewEncoder(w).Encode(GetUsers(db))
+	}).Methods("GET")
+
 	CreateUsersTable(db)
 	CreateUser(db, User{Name: "skibidi", Password: "asd123"})
-
-
+	users := GetUsers(db)
+	fmt.Println(users)
 }
