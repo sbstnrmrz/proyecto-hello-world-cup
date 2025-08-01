@@ -44,6 +44,9 @@ func main()  {
 
 		user := User{Name: username, Password: password}
 		CreateUser(db, user)
+		w.Header().Set("Content-Type", "application/json");
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(user)
 	}).Methods("POST")
 
 	router.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
