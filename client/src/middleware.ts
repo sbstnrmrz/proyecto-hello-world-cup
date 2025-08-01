@@ -19,6 +19,7 @@ export const onRequest = defineMiddleware((context, next) => {
     }
 
     const sessionToken = context.cookies.get('session_token')?.value;
+    console.log(sessionToken)
     if (!sessionToken) {
         context.request.headers.set('x-redirect-to', context.url.pathname);
         return context.redirect(context.url.origin +  '/login');

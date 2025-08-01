@@ -98,6 +98,7 @@ func main()  {
 
 		sessionToken := GenerateSessionToken()
 		sessions[sessionToken] = username
+		log.Println(sessionToken)
 
 		http.SetCookie(w, &http.Cookie{
 			Name:     "session_token",
@@ -107,6 +108,7 @@ func main()  {
 		})
 
 		http.Error(w, fmt.Sprintf("Login successfull"), http.StatusOK)
+  		json.NewEncoder(w).Encode(sessionToken)
 	}).Methods("POST")
 
 	router.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
