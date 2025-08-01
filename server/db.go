@@ -62,6 +62,7 @@ func GetUser(db *sql.DB, email string) User {
 	err := row.Scan(&user.Nick, &user.Email, &user.DateCreated, &user.LastSession)
 	if err != nil {
 		log.Printf("cannot found user '%s': %v\n", email, err)
+		return User{}
 	}
 
 	return user 

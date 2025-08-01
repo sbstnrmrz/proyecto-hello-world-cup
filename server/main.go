@@ -52,7 +52,37 @@ func main()  {
 		email := r.FormValue("email")
 		password := r.FormValue("password")
 
-		regexp.Compile("[a-zA-Z1-9.]+@unet.edu.ve$")
+		studentEmailRegexp, err := regexp.Compile(`[a-zA-Z1-9.]+@unet.edu.ve$`)
+		if err != nil {
+			log.Println("failed to compile regexp:",err)
+			return
+		}
+
+		professorEmailRegexp, err := regexp.Compile(`[a-zA-Z1-9.]+profesor@unet.edu.ve$`)
+		if err != nil {
+			log.Println("failed to compile regexp:",err)
+			return
+		}
+
+		var tipoUsuario = 0
+
+		if !studentEmailRegexp.MatchString(email) {
+			log.Println("student email doesnt match pattern:")
+		} else {
+			tipoUsuario = 1	
+		}
+
+		if !professorEmailRegexp.MatchString(email) {
+			log.Println("professor email doesnt match pattern:")
+		} else {
+			tipoUsuario = 2
+		}
+
+		if tipoUsuario == 0 {
+			log.Println("wrong email doesnt match pattern")
+			http.Error(w, "wrong email pattern", http.StatusBadRequest)
+			return
+		}
 
 		var savedEmail string
         err = db.QueryRow("SELECT email FROM users WHERE email = ?", email).Scan(&savedEmail)
@@ -73,7 +103,7 @@ func main()  {
 			Nick: nickFromEmail,
 			Email: email,
 			Password: password,
-			TipoUsuario: 1,
+			TipoUsuario: tipoUsuario,
 		}
 		CreateUser(db, user)
 		http.Error(w, fmt.Sprintf("User for email: %s created successfully", email), http.StatusOK)
@@ -134,7 +164,7 @@ func main()  {
   		w.Header().Set("Content-Type", "application/json")
 		session, err := r.Cookie("session-token")
 		if (err != nil) {
-			log.Printf("ohh no dio error")
+			log.Printf("ohh no dio error\n")
 		}
 
 		json.NewEncoder(w).Encode(GetUser(db, sessions[session.Value]))
