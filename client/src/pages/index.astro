@@ -1,18 +1,24 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
 import "../styles/global.css";
 
 ---
 
 <Layout>
-  <div class='flex gap-8'>
-    {Array.from({length: 4}).map((_, index) => {
-      return (
-        <div class='w-64 h-64 bg-red-200'>
-        </div>
-      );
-    })
-    }
-  </div>
+
+  <div class="bg">
+			
+		<form method="post" class="initial_forms">
+
+			<h1 class="initial_titles">Crea una cuenta</h1>
+			<input class="initial_inputs" name="username" type="text" placeholder="Nombre de usuario">
+			<input class="initial_inputs" name="password" type="password" placeholder="Contraseña">
+			<button class="initial_buttons" type="submit">Crear Cuenta</button>
+      <a class="link_create" href="/login">Ya tienes una cuenta, inicia sesion</a>
+
+
+		</form>
+
+	</div>
+  
 </Layout>
