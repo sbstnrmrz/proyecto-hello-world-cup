@@ -119,13 +119,26 @@
 
    @apply flex;
    @apply flex-col; 
-   @apply w-[60%];
    @apply h-full;
    @apply items-center;
    @apply justify-center;
    @apply border-2;
    @apply rounded-3xl;
    @apply bg-gradient-to-tl from-[#8996b6] to-[#eef1ff];
+
+}
+
+.home_search {
+
+   @apply bg-amber-50;
+   @apply border-2 ;
+   @apply mb-2;
+   @apply rounded-lg;
+   @apply text-center;
+   @apply w-full;
+   @apply transition-all;
+   @apply duration-500;
+   @apply selection:bg-gray-400;
 
 }
 
@@ -140,5 +153,86 @@
    @apply border-2;
    @apply rounded-3xl;
    @apply bg-gradient-to-tl from-[#4f6fc3] to-[#d3dbff];
+
+}
+
+
+
+.profile_bg {
+
+   @apply bg-gradient-to-tl from-[#4f6fc3] to-[#d3dbff];
+   @apply w-[33%];
+   @apply h-[50%];
+   @apply border;
+   @apply rounded-3xl;
+
+}
+
+.profile_link {
+
+   @apply m-5;
+
+}
+
+.profile_link:hover {
+
+   @apply m-5;
+   @apply shadow-lg;
+   @apply size-105;
+   @apply italic;
+}
+
+.profile_changes {
+
+   @apply bg-gradient-to-br from-gray-300 to-gray-500;
+   @apply border;
+   @apply w-[15%];
+   @apply h-[5%];
+   @apply rounded-lg;
+   @apply text-center;
+   @apply transition-all;
+   @apply duration-500;
+
+}
+
+.student_inputs {
+
+   @apply bg-amber-50;
+   @apply border-2 ;
+   @apply rounded-lg;
+   @apply text-center;
+   @apply w-[30%];
+   @apply transition-all;
+   @apply duration-500;
+   @apply selection:bg-gray-400;
+
+}
+
+.student_commentary {
+
+   @apply bg-amber-50;
+   @apply border-2 ;
+   @apply rounded-lg;
+   @apply text-center;
+   @apply text-[12px];
+   @apply text-wrap;
+   @apply w-60;
+   @apply h-[50%];
+   @apply transition-all;
+   @apply duration-500;
+   @apply selection:bg-gray-400;
+
+}
+
+.teacher_inputs {
+
+   @apply bg-amber-50;
+   @apply border-2 ;
+   @apply rounded-lg;
+   @apply text-center;
+   @apply w-[90%];
+   @apply transition-all;
+   @apply duration-500;
+   @apply selection:bg-gray-400;
 
 }

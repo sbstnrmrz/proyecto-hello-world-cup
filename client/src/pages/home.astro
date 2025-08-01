@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import "../styles/global.css";
 
-try {
+/*try {
     const cookieAstro = Astro.cookies.get('session-token')
     const myHeaders = new Headers();
     if (cookieAstro) {
@@ -20,7 +20,7 @@ try {
     console.log(content)
 } finally {
     const a = 0;
-}
+}*/
 ---
 
 <Layout> 
@@ -37,7 +37,12 @@ try {
 
             </div>
 
-            <div class="home_content">b
+            <div class="w-[90%] ml-5 mr-5">
+
+                <input class="home_search" type="text"></input>
+
+                <div class="home_content">
+                </div>
 
             </div>
 
@@ -47,13 +52,17 @@ try {
                 <div class="flex flex-row">
 
                     <div>aaaaaa</div>
-                    <div>Nombre del usuario</div><br><br>
+                    <div>
+                    
+                        <a class="profile_link" href="/profile-student">nombre de usuario</a>
+                    
+                    </div><br><br>
 
                 </div>
                 <div class="flex flex-row">
 
-                    <div>#seguidores</div>
-                    <div>#seguidos</div><br><br>
+                    <div id="followers">#seguidores</div>
+                    <div id="following">#seguidos</div><br><br>
 
 
                 </div>

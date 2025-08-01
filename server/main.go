@@ -172,6 +172,12 @@ func main()  {
 
 	DropUsersTable(db)
 	CreateUsersTable(db)
+	CreateUser(db, User{
+		Nick: "admin",
+		Email: "admin@unet.edu.ve",
+		Password: "1234",
+		TipoUsuario: 2,
+	})
 
 	const port = "8081"
 	fmt.Printf("server listening in localhost:%s\n",port)
