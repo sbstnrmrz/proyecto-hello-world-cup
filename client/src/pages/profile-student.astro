@@ -1,6 +1,21 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import "../styles/global.css";
+
+const cookieAstro = Astro.cookies.get('session-token')
+const myHeaders = new Headers();
+if (cookieAstro) {
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Cookie", 'session-token=' + cookieAstro.value)
+}
+
+const response = await fetch(new URL('http://localhost:8081/get-user'), {
+    method: 'GET',
+    credentials: 'include',
+    headers: myHeaders,
+});
+
+const user = await response.json();
 ---
 
 <Layout>
@@ -22,8 +37,8 @@ import "../styles/global.css";
                 </div>
 
                 <div class="flex flex-col ml-25">
-                    <h1 id="placeholder_nick">Nick</h1>
-                    <h1 id="placeholder_correo">Correo</h1>
+                    <h1 id="placeholder_nick">{user.Nick}</h1>
+                    <h1 id="placeholder_correo">{user.Email}</h1>
                 </div>
 
             </div>
@@ -32,7 +47,7 @@ import "../styles/global.css";
 
                 <input class="student_inputs"  type="text"></input>
                 <input class="student_inputs" type="text"></input>
-                
+
 
             </div>
 

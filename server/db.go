@@ -59,9 +59,10 @@ func GetUser(db *sql.DB, email string) User {
 	user := User{}
 	const sentence = `SELECT nick, email, tipo_usuario, date_created, last_session FROM users WHERE email = ?`
 	row := db.QueryRow(sentence, email)
-	err := row.Scan(&user.Nick, &user.Email, &user.DateCreated, &user.LastSession)
+	err := row.Scan(&user.Nick, &user.Email, &user.TipoUsuario,&user.DateCreated, &user.LastSession)
 	if err != nil {
 		log.Printf("cannot found user '%s': %v\n", email, err)
+		return User{};
 	}
 
 	return user 
