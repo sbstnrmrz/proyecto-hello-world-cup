@@ -23,3 +23,5 @@ client/.DS_Store
 
 # jetbrains setting folder
 client/.idea/
+
+server/database.db

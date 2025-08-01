@@ -33,7 +33,8 @@ func main()  {
 		username := r.FormValue("username")
 		password := r.FormValue("password")
 
-        err = db.QueryRow("SELECT name FROM users WHERE name = ?", username).Scan()
+		var name string
+        err = db.QueryRow("SELECT name FROM users WHERE name = ?", username).Scan(&name)
 		if err == nil {
             log.Println("username:",username,"already exists!")
 			return
