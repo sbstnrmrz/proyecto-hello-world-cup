@@ -1,6 +1,21 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import "../styles/global.css";
+
+const cookieAstro = Astro.cookies.get('session-token')
+const myHeaders = new Headers();
+if (cookieAstro) {
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Cookie", 'session-token=' + cookieAstro.value)
+}
+
+const response = await fetch(new URL('http://localhost:8081/get-user'), {
+    method: 'GET',
+    credentials: 'include',
+    headers: myHeaders,
+});
+
+const user = await response.json();
 ---
 
 <Layout>
@@ -23,8 +38,8 @@ import "../styles/global.css";
                 </div>
 
                 <div class="flex flex-col ml-15">
-                    <h1 id="placeholder_nick">Nick</h1>
-                    <h1 id="placeholder_correo">Correo</h1>
+                    <h1 id="placeholder_nick">{"@" + user.Nick}</h1>
+                    <h1 id="placeholder_correo">{user.Email}</h1>
                     <input class="student_commentary" type="text" placeholder="Comentario"></input>
                 </div>
 
@@ -34,38 +49,17 @@ import "../styles/global.css";
 
                 <input class="student_inputs"  type="text"></input>
                 <input class="student_inputs" type="text"></input>
-                
+
 
             </div>
 
             <div class="text-center m-4">
                 <h1 class="">Areas de estudio</h1>
                 <!--AQUI VA EL FOR QUE RETORNA UN DIV POR CADA AREA DE ESTUDIO QUE NECESITA -->
-                <div>ss</div>
-                <div>ddd</div>
-                <div>ggg</div>
-                <div>opop</div>
-                <div>5156</div>
             </div>
 
         </div>
         <br>
         <button class="profile_changes" type="submit">Guardar Cambios</button>
     </div>
-  <script>
-    const pfpInput = document.getElementById('pfp-input'); 
-    const imgs = pfpInput.files;
-
-    pfpInput.addEventListener('change', () => {
-      if (imgs.length === 0) {
-        console.log('no file detected ');
-      } else {
-        
-      }
-
-      
-    });
-
-    
-  </script>
 </Layout>

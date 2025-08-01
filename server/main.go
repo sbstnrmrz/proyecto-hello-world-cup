@@ -167,7 +167,12 @@ func main()  {
 			log.Printf("ohh no dio error\n")
 		}
 
-		json.NewEncoder(w).Encode(GetUser(db, sessions[session.Value]))
+		user := GetUser(db, sessions[session.Value])
+		if user.Nick == "" {
+			http.Error(w, fmt.Sprintf("Usuario no existe"), http.StatusBadRequest)
+		}
+
+		json.NewEncoder(w).Encode(user)
 	}).Methods("GET")
 
 	DropUsersTable(db)
