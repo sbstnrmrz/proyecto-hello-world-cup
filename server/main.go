@@ -11,6 +11,13 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
 )
+func enableCORS(w *http.ResponseWriter) {
+	// Puedes usar '*' para permitir cualquier origen (útil para desarrollo, pero no recomendado en producción sin precauciones)
+	(*w).Header().Set("Access-Control-Allow-Origin", "http://localhost:4321") // ¡Cambia esto por el origen de tu frontend!
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+	(*w).Header().Set("Access-Control-Allow-Credentials", "true") // Si necesitas manejar cookies o credenciales
+}
 
 func main()  {
 	db, err := sql.Open("sqlite3", "database.db");
@@ -24,29 +31,32 @@ func main()  {
 	router.HandleFunc("/create-user", func(w http.ResponseWriter, r *http.Request) {
 //		w.Header().Set("Content-Type", "application/json")
 //		json.NewEncoder(w).Encode()
+		enableCORS(&w)
 		err := r.ParseForm()
 		if err != nil {
 			log.Println("error parsing form:",err);
+			http.Error(w, "Internal error", http.StatusInternalServerError)
 			return
 		}
 
 		username := r.FormValue("username")
 		password := r.FormValue("password")
 
-        err = db.QueryRow("SELECT name FROM users WHERE name = ?", username).Scan()
+		var name string
+        err = db.QueryRow("SELECT name FROM users WHERE name = ?", username).Scan(&name)
 		if err == nil {
             log.Println("username:",username,"already exists!")
+			http.Error(w, fmt.Sprintf("Username: %s already exists", username), http.StatusBadRequest)
 			return
         } else if err != sql.ErrNoRows {
+			http.Error(w, "Database error", http.StatusBadRequest)
 			fmt.Println("db error:", err)
             return
         }
 
 		user := User{Name: username, Password: password}
 		CreateUser(db, user)
-		w.Header().Set("Content-Type", "application/json");
-		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(user)
+		http.Error(w, fmt.Sprintf("User: %s created successfully", username), http.StatusOK)
 	}).Methods("POST")
 
 	router.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
@@ -65,15 +75,18 @@ func main()  {
         err = db.QueryRow("SELECT password FROM users WHERE name = ?", username).Scan(&hashedPassword)
 		if err == nil {
 			log.Printf("username: %s not found\n", username)
+			http.Error(w, fmt.Sprintf("Username or password incorrect"), http.StatusBadRequest)
 			return
         } 
 
 		passwordMatch := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 		if passwordMatch != nil {
 			log.Println("password doesnt match:", err)
+			http.Error(w, fmt.Sprintf("Username or password incorrect"), http.StatusBadRequest)
 			return
 		}
 
+		http.Error(w, fmt.Sprintf("Login successfull"), http.StatusOK)
 	}).Methods("POST")
 
 	router.HandleFunc("/get-users", func(w http.ResponseWriter, r *http.Request) {
