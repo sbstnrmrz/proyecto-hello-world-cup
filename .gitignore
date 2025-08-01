@@ -1,17 +1,17 @@
 # build output
-dist/
+client/dist/
 
 # generated types
-.astro/
+client/.astro/
 
 # dependencies
-node_modules/
+client/node_modules/
 
 # logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+client/pnpm-debug.log*
 
 # environment variables
 .env
@@ -19,6 +19,7 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+client/.DS_Store
 
 # jetbrains setting folder
-.idea/
+client/.idea/
