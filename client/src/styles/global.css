@@ -91,4 +91,54 @@
    @apply rounded-lg;
 }
 
+.home_container {
 
+   @apply w-full;
+   @apply min-h-screen;
+   @apply p-6;
+   @apply flex;
+   @apply flex-row;
+   @apply justify-between;
+
+}
+
+.home_menu {
+
+   @apply flex;
+   @apply flex-col; 
+   @apply w-[20%];
+   @apply items-center;
+   @apply justify-center;
+   @apply border-2;
+   @apply rounded-3xl;
+   @apply bg-gradient-to-tl from-[#4f6fc3] to-[#d3dbff];
+
+}
+
+.home_content {
+
+   @apply flex;
+   @apply flex-col; 
+   @apply w-[60%];
+   @apply h-full;
+   @apply items-center;
+   @apply justify-center;
+   @apply border-2;
+   @apply rounded-3xl;
+   @apply bg-gradient-to-tl from-[#8996b6] to-[#eef1ff];
+
+}
+
+.menu_profile {
+
+   @apply flex;
+   @apply flex-col; 
+   @apply w-[18%];
+   @apply h-[30%];
+   @apply items-center;
+   @apply justify-center;
+   @apply border-2;
+   @apply rounded-3xl;
+   @apply bg-gradient-to-tl from-[#4f6fc3] to-[#d3dbff];
+
+}
