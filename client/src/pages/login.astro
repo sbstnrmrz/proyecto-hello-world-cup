@@ -1,19 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import "../styles/global.css";
 ---
 
-<div class="bg-blue-800 flex flex-col items-center justify-center w-full h-full">
-
-    <form method="post" action="" class="w-[30%] bg-amber-500 flex flex-col gap-y-5">
-        <h1>LOGIN</h1>
-        <input name="aaa" class="bg-amber-50 border-2" type="text" placeholder="Nombre de usuario">
-        <input name="bbb" class="bg-amber-50 border-2" type="password" placeholder="contrasenia">
-        <button class="bg-amber-300" type="submit">Iniciar Sesion</button>
-
-
-    </form>
-
-</div>
+<Layout>
+    <div class="bg">
+		<form method="post" class="initial_forms">
+			<h1 class="initial_titles">Inicio de sesion</h1>
+			<input class="initial_inputs" name="username" type="text" placeholder="Nombre de usuario">
+			<input class="initial_inputs" name="password" type="password" placeholder="contrasenia">
+			<button class="initial_buttons" type="submit">Iniciar Sesion</button>
+      		<a class="link_create" href="/create-account">No tienes una cuenta?, REGISTRATE</a>
+        </form>
+	</div>
+</Layout>
 
 <script>
 const form = document.querySelector('form');
@@ -40,6 +40,4 @@ if (form) {
         }
     });
 }
-
-
 </script>

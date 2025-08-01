@@ -1,9 +1,94 @@
 @import "tailwindcss";
 
+.bg {
+
+   @apply bg-gradient-to-br from-gray-300 to-gray-700;
+   @apply flex;
+   @apply flex-col;
+   @apply items-center;
+   @apply justify-center;
+   @apply w-full;
+   @apply h-full;
+
+}
+
+.initial_titles {
+
+   @apply m-1;
+   @apply font-mono;
+   @apply text-[24px];
+
+}
+
+.initial_forms {
+
+   @apply w-[30%];
+   @apply h-[35%];
+   @apply border-2;
+   @apply rounded-3xl;
+   @apply flex flex-col;
+   @apply justify-evenly;
+   @apply items-center;
+   @apply bg-gradient-to-tl from-[#335cc5] to-[#b3c1fe];
+
+}
+
 .initial_inputs {
 
    @apply bg-amber-50;
    @apply border-2 ;
    @apply mt-2;
+   @apply rounded-lg;
+   @apply text-center;
+   @apply w-[60%];
+   @apply transition-all;
+   @apply duration-500;
+   @apply selection:bg-gray-400;
 
 }
+
+.initial_inputs:hover {
+      
+      @apply scale-120;
+
+}
+
+.initial_buttons {
+
+   @apply bg-gradient-to-br from-gray-300 to-gray-500;
+   @apply border;
+   @apply m-2;
+   @apply w-[36%];
+   @apply rounded-lg;
+   @apply text-center;
+   @apply transition-all;
+   @apply duration-500;
+
+}
+
+.initial_buttons:hover{
+
+   @apply scale-120;
+   @apply bg-gradient-to-br from-gray-500 to-gray-600;
+
+}
+
+.link_create {
+
+   @apply mb-3;
+   @apply text-[14px];
+   @apply font-mono;
+   @apply font-extrabold;
+   @apply transition-all;
+   @apply duration-800;
+
+}
+
+.link_create:hover {
+
+   @apply shadow-lg;
+   @apply bg-gray-400;
+   @apply rounded-lg;
+}
+
+
