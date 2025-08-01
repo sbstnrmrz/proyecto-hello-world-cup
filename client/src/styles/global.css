@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+.initial_inputs {
+
+   @apply bg-amber-50;
+   @apply border-2 ;
+   @apply mt-2;
+
+}
